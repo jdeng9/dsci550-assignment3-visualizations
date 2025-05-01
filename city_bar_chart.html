@@ -1,42 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Top Haunted Cities</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
     .bar { fill: steelblue; }
     .bar:hover { fill: darkorange; }
     .axis-label { font-size: 14px; font-weight: bold; }
+    #chart-container {
+      overflow-x: auto;
+    }
   </style>
 </head>
 <body>
 <h2 style="text-align:center;">Top Haunted Cities</h2>
-<div id="bar-chart"></div>
+<div id="chart-container">
+  <div id="bar-chart"></div>
+</div>
+
 <script>
-const svg = d3.select("#bar-chart").append("svg")
-      .attr("width", 1400)
-      .attr("height", 600),
-      margin = {top: 50, right: 30, bottom: 150, left: 60},
-      width = +svg.attr("width") - margin.left - margin.right,
-      height = +svg.attr("height") - margin.top - margin.bottom,
-      g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+const barWidth = 40; // Minimum bar width
+const chartHeight = 600;
 
 d3.json("city_counts.json")
   .then(data => {
-    console.log("✅ Data loaded successfully:", data);
+    console.log("Raw data loaded:", data);
+    const filteredData = data.filter(d => d.count >= 5);
+    console.log("Filtered data (count >= 5):", filteredData);
 
-    if (!Array.isArray(data) || data.length === 0) {
-      console.warn("⚠️ Warning: Data is empty or not formatted as an array.");
-      return;
-    }
-    const filteredData = data.filter(d => d.count >= 10);
+
+    const dynamicWidth = Math.max(filteredData.length * barWidth, 400);
+
+    const svg = d3.select("#bar-chart").append("svg")
+      .attr("width", dynamicWidth)
+      .attr("height", chartHeight);
+
+    const margin = { top: 50, right: 30, bottom: 150, left: 60 };
+    const width = dynamicWidth - margin.left - margin.right;
+    const height = chartHeight - margin.top - margin.bottom;
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
     filteredData.sort((a, b) => b.count - a.count);
-    const x = d3.scaleBand().domain(filteredData.map(d => d.city)).range([0, width]).padding(0.1);
-    const y = d3.scaleLinear().domain([0, d3.max(filteredData, d => d.count)]).nice().range([height, 0]);
+
+    const x = d3.scaleBand()
+      .domain(filteredData.map(d => d.city))
+      .range([0, width])
+      .padding(0.1);
+
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(filteredData, d => d.count)])
+      .nice()
+      .range([height, 0]);
 
     g.append("g")
       .attr("transform", `translate(0,${height})`)
