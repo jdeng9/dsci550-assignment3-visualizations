@@ -23,29 +23,40 @@ const svg = d3.select("#bar-chart").append("svg").attr("width", 960).attr("heigh
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-d3.json("state_counts.json").then(data => {
-  data.sort((a, b) => b.count - a.count);
-  const x = d3.scaleBand().domain(data.map(d => d.state)).range([0, width]).padding(0.1);
-  const y = d3.scaleLinear().domain([0, d3.max(data, d => d.count)]).nice().range([height, 0]);
+d3.json("state_counts.json") // make sure this path is correct
+  .then(data => {
+    console.log("Data loaded successfully:", data); // ✅ DEBUG LOG
 
-  g.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "rotate(-45)")
-    .style("text-anchor", "end");
+    if (!Array.isArray(data) || data.length === 0) {
+      console.warn("⚠️ Warning: Data is empty or not an array.");
+      return;
+    }
 
-  g.append("g").call(d3.axisLeft(y));
+    data.sort((a, b) => b.count - a.count);
+    const x = d3.scaleBand().domain(data.map(d => d.state)).range([0, width]).padding(0.1);
+    const y = d3.scaleLinear().domain([0, d3.max(data, d => d.count)]).nice().range([height, 0]);
 
-  g.selectAll(".bar")
-    .data(data)
-    .enter().append("rect")
-    .attr("class", "bar")
-    .attr("x", d => x(d.state))
-    .attr("y", d => y(d.count))
-    .attr("width", x.bandwidth())
-    .attr("height", d => height - y(d.count));
-});
+    g.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end");
+
+    g.append("g").call(d3.axisLeft(y));
+
+    g.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", d => x(d.state))
+      .attr("y", d => y(d.count))
+      .attr("width", x.bandwidth())
+      .attr("height", d => height - y(d.count));
+  })
+  .catch(error => {
+    console.error("❌ Error loading or parsing JSON data:", error); // ✅ ERROR HANDLING
+  });
 </script>
 </body>
 </html>
