@@ -20,11 +20,12 @@
 <div id="chart-container">
   <div id="bar-chart"></div>
 </div>
-
+<div id="tooltip"></div>
 <script>
-const barWidth = 20; // Minimum bar width
+const barWidth = 15; // Minimum bar width
 const chartHeight = 600;
-
+const tooltip = d3.select("#tooltip");
+  
 d3.json("city_counts.json")
   .then(data => {
     console.log("Raw data loaded:", data);
@@ -74,7 +75,18 @@ d3.json("city_counts.json")
       .attr("x", d => x(d.city))
       .attr("y", d => y(d.count))
       .attr("width", x.bandwidth())
-      .attr("height", d => height - y(d.count));
+      .attr("height", d => height - y(d.count))
+      .on("mouseover", (event, d) => {
+        tooltip.style("opacity", 1)
+          .html(`<strong>${d.city}</strong><br/>Count: ${d.count}`);
+      })
+      .on("mousemove", (event) => {
+        tooltip.style("left", (event.pageX + 10) + "px")
+               .style("top", (event.pageY - 28) + "px");
+      })
+      .on("mouseout", () => {
+        tooltip.style("opacity", 0);
+      });
   })
   .catch(error => {
     console.error("❌ Error loading or parsing JSON data:", error);
