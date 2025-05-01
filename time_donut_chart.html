@@ -39,7 +39,7 @@ const arc = d3.arc()
   .innerRadius(radius * 0.5)
   .outerRadius(radius);
 
-fetch("../data/json/time_of_day_counts.json")
+fetch("time_of_day_counts.json")
   .then(response => response.json())
   .then(data => {
     const pieData = pie(data);
