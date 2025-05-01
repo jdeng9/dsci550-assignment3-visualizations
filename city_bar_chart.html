@@ -10,7 +10,6 @@
     .bar { fill: steelblue; }
     .bar:hover { fill: darkorange; }
     .axis-label { font-size: 14px; font-weight: bold; }
-    .x-axis text { font-size: 10px; transform: rotate(-45deg); text-anchor: end; }
   </style>
 </head>
 <body>
@@ -18,38 +17,48 @@
 <div id="bar-chart"></div>
 <script>
 const svg = d3.select("#bar-chart").append("svg")
-      .attr("width", 1400)  
+      .attr("width", 1400)
       .attr("height", 600),
       margin = {top: 50, right: 30, bottom: 150, left: 60},
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-d3.json("city_counts.json").then(data => {
-  data.sort((a, b) => b.count - a.count);
-  const x = d3.scaleBand().domain(data.map(d => d.city)).range([0, width]).padding(0.1);
-  const y = d3.scaleLinear().domain([0, d3.max(data, d => d.count)]).nice().range([height, 0]);
+d3.json("data/json/city_counts.json")
+  .then(data => {
+    console.log("✅ Data loaded successfully:", data);
 
-  g.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .style("font-size", "10px")  
-    .attr("transform", "rotate(-45)")
-    .style("text-anchor", "end");
+    if (!Array.isArray(data) || data.length === 0) {
+      console.warn("⚠️ Warning: Data is empty or not formatted as an array.");
+      return;
+    }
 
-  g.append("g").call(d3.axisLeft(y));
+    data.sort((a, b) => b.count - a.count);
+    const x = d3.scaleBand().domain(data.map(d => d.city)).range([0, width]).padding(0.1);
+    const y = d3.scaleLinear().domain([0, d3.max(data, d => d.count)]).nice().range([height, 0]);
 
-  g.selectAll(".bar")
-    .data(data)
-    .enter().append("rect")
-    .attr("class", "bar")
-    .attr("x", d => x(d.city))
-    .attr("y", d => y(d.count))
-    .attr("width", x.bandwidth())
-    .attr("height", d => height - y(d.count));
-});
+    g.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .style("font-size", "10px")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end");
+
+    g.append("g").call(d3.axisLeft(y));
+
+    g.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", d => x(d.city))
+      .attr("y", d => y(d.count))
+      .attr("width", x.bandwidth())
+      .attr("height", d => height - y(d.count));
+  })
+  .catch(error => {
+    console.error("❌ Error loading or parsing JSON data:", error);
+  });
 </script>
 </body>
 </html>
-
