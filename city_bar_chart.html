@@ -32,11 +32,11 @@ d3.json("city_counts.json")
       console.warn("⚠️ Warning: Data is empty or not formatted as an array.");
       return;
     }
-    const filteredData = data.filter(d => d.count >= 5);
+    const filteredData = data.filter(d => d.count >= 10);
 
     filteredData.sort((a, b) => b.count - a.count);
-    const x = d3.scaleBand().domain(data.map(d => d.city)).range([0, width]).padding(0.1);
-    const y = d3.scaleLinear().domain([0, d3.max(data, d => d.count)]).nice().range([height, 0]);
+    const x = d3.scaleBand().domain(filteredData.map(d => d.city)).range([0, width]).padding(0.1);
+    const y = d3.scaleLinear().domain([0, d3.max(filteredData, d => d.count)]).nice().range([height, 0]);
 
     g.append("g")
       .attr("transform", `translate(0,${height})`)
