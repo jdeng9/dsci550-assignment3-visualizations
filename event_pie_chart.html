@@ -58,4 +58,33 @@ fetch("event_type_counts.json")
       .attr('d', arc)
       .attr('fill', d => color(d.data.event_type))
       .attr('stroke', 'white')
-      .
+      .attr('stroke-width', 2);
+
+    const legend = d3.select("#legend")
+      .append("svg")
+      .attr("width", 200)
+      .attr("height", pieData.length * 25);
+
+    const legendItem = legend.selectAll(".legend-item")
+      .data(pieData)
+      .enter()
+      .append("g")
+      .attr("transform", (d, i) => `translate(0, ${i * 25})`)
+      .attr("class", "legend-item");
+
+    legendItem.append("rect")
+      .attr("width", 18)
+      .attr("height", 18)
+      .attr("fill", d => color(d.data.event_type));
+
+    legendItem.append("text")
+      .attr("x", 24)
+      .attr("y", 14)
+      .text(d => `${d.data.event_type} (${d.data.count})`);
+  })
+  .catch(error => {
+    console.error("❌ Error loading or parsing JSON data:", error);
+  });
+</script>
+</body>
+</html>
