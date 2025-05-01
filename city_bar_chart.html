@@ -22,13 +22,13 @@
 </div>
 
 <script>
-const barWidth = 40; // Minimum bar width
+const barWidth = 20; // Minimum bar width
 const chartHeight = 600;
 
 d3.json("city_counts.json")
   .then(data => {
     console.log("Raw data loaded:", data);
-    const filteredData = data.filter(d => d.count >= 5);
+    const filteredData = data.filter(d => d.count >= 10);
     console.log("Filtered data (count >= 5):", filteredData);
 
 
