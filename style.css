@@ -1,0 +1,35 @@
+.topnav {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #ff82b1;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  background-color: inherit;
+  float: center;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 20px 20px;
+  transition: 0.3s;
+  color: white;
+  font-size: 20px;
+  font-family: 'Coming Soon';
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ffb7d2;
+}
+
+/* Add an active class to highlight the current page */
+.active {
+    background-color: #5fe0e2;
+    color: white;
+}
+
+/* Hide the link that should open and close the topnav on small screens */
+.topnav .icon {
+    display: none;
+}
