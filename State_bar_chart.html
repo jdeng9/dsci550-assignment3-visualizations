@@ -1,9 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>State Bar Chart</title>
+  
+  <head>
+    <h1> State Bar Chart </h1>
+  <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="topnav" id="myTopnav">
+  <a href="index.html" class="active">Home</a>
+  <a href="State_bar_chart.html">State Bar Chart</a>
+  <a href="city_bar_chart.html">City Bar Chart</a>
+  <a href="event_pie_chart.html">Event Pie Chart</a>
+  <a href="time_donut_chart">Time Donut Chart</a>
+  <a href="state_treemap.html">State Treemap</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+    <!info about the page>
+  </head>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; }
@@ -12,7 +31,7 @@
     .axis-label { font-size: 14px; font-weight: bold; }
     .x-axis text { transform: rotate(-45deg); text-anchor: end; }
   </style>
-</head>
+
 <body>
 <h2 style="text-align:center;">Top Haunted States</h2>
 <div id="bar-chart"></div>
