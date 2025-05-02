@@ -1,7 +1,7 @@
 .topnav {
   overflow: hidden;
   border: 1px solid #ccc;
-  background-color: #ff82b1;
+  background-color: #8B0000;
 }
 
 /* Style the links inside the navigation bar */
@@ -13,9 +13,10 @@
   cursor: pointer;
   padding: 20px 20px;
   transition: 0.3s;
-  color: white;
+  color: #ffffff;
   font-size: 20px;
-  font-family: 'Coming Soon';
+  border-bottom: 4px solid #b22222;
+  font-family: 'Trebuchet MS', Helvetica, sans-serif;
 }
 
 /* Change the color of links on hover */
